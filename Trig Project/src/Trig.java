@@ -1,4 +1,3 @@
-import java.lang.Math;
 public class Trig {
 	public static double sin(double degrees) {
 		double radians = degrees * (Math.PI / 180);
@@ -16,11 +15,15 @@ public class Trig {
 	}
 	
 	public static double asin(double value) {
+	    if (value < -1 || value > 1)
+	        throw new IllegalArgumentException("Can't compute asin of " + value);
 		return Math.asin(value) * (180 / Math.PI);
 	}
 	
 	public static double acos(double value) {
-		return Math.acos(value) * (180 / Math.PI);
+	    if (value < -1 || value > 1)
+            throw new IllegalArgumentException("Can't compute acos of " + value);
+        return Math.acos(value) * (180 / Math.PI);
 	}
 	
 	public static double atan(double value) {
@@ -72,11 +75,8 @@ public class Trig {
 				//If the angle is not known
 				// A = acos((b^2 + c^2 - a^2) / 2bc)
 				System.out.printf("Using Law of Cosines to determine %S%n", a.getName());
-				double value = (Math.pow(b.side(), 2) + Math.pow(c.side(), 2) 
-				- Math.pow(a.side(), 2)) / (2*b.side()*c.side());
-				double newAngle = acos(value);
-				a.setAngle(newAngle);
-				System.out.println("Angle " + a.getName() + " is now " + a.angle() + ".");
+				a.setAngle((acos((Math.pow(b.side(), 2) + Math.pow(c.side(), 2) 
+				- Math.pow(a.side(), 2)) / (2*b.side()*c.side()))));
 			} else if(!known(a.side())) {
 				//If the side is not known
 				// a = sqrt(b^2 + c^2 - 2*b*c*cosA)
@@ -104,6 +104,10 @@ public class Trig {
 	 * It loops through a list of if-else statements several times, seeing if it can solve for an unknown piece each time.
 	 */
 	public static void solve(Side a, Side b, Side c) {
+	    System.out.println("Solving:");
+	    System.out.println(a);
+	    System.out.println(b);
+	    System.out.println(c);
 		int counter = 0;
 		boolean exit = false;
 		//As long as not everything is solved;
