@@ -72,8 +72,11 @@ public class Trig {
 				//If the angle is not known
 				// A = acos((b^2 + c^2 - a^2) / 2bc)
 				System.out.printf("Using Law of Cosines to determine %S%n", a.getName());
-				a.setAngle((acos((Math.pow(b.side(), 2) + Math.pow(c.side(), 2) 
-				- Math.pow(a.side(), 2)) / 2*b.side()*c.side())));
+				double value = (Math.pow(b.side(), 2) + Math.pow(c.side(), 2) 
+				- Math.pow(a.side(), 2)) / (2*b.side()*c.side());
+				double newAngle = acos(value);
+				a.setAngle(newAngle);
+				System.out.println("Angle " + a.getName() + " is now " + a.angle() + ".");
 			} else if(!known(a.side())) {
 				//If the side is not known
 				// a = sqrt(b^2 + c^2 - 2*b*c*cosA)
@@ -129,9 +132,10 @@ public class Trig {
 			LawOf180(b, c, a);
 			LawOf180(c, a, b);
 			
+			System.out.println("A = " + a.angle() + ", B = " + b.angle() + ", C = " + c.angle() + ".");
 			//At the end of the first loop, if nothing has been solved, then it is a SSA triangle.
 			if(counter == 1 & tallyKnown(a.angle(),a.side(),b.angle(),b.side(),c.angle(),c.side()) == 3.0) {
-				solveSSA(a, b, c);
+				//solveSSA(a, b, c);
 				exit = true;
 			}
 		}

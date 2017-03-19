@@ -2,8 +2,8 @@ public class Test {
 
 	public static void main(String[] args) {
 		Side a = new Side(10, Double.NaN, "a");
-		Side b = new Side(7, 30, "b");
-		Side c = new Side(Double.NaN, Double.NaN, "c");
+		Side b = new Side(10, Double.NaN, "b");
+		Side c = new Side(10, Double.NaN, "c");
 		
 		
 		Trig.solve(a, b, c);
