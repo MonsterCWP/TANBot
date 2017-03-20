@@ -39,7 +39,9 @@ public class Side {
 		angle = a.angle;
 		name = (a.getName() + "2");
 	}
-	
+	public String toString() {
+        return String.format("%s = %g, %S = %g°", name, side, name, angle);
+    }
 	public boolean oneKnown() {
 		if(Trig.known(angle) ^ Trig.known(side)) { return true; } return false;
 	}
