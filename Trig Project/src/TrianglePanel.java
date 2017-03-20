@@ -20,11 +20,12 @@ public class TrianglePanel extends JPanel {
         g2.drawString(s, (float) x - fm.stringWidth(s) / 2, (float) y - fm.getHeight() / 2 + fm.getAscent());
     }
 
-    static void drawEdgeString(Graphics2D g2, String s, double x,double dx,  double y, double dy) {
-        
+    static void drawEdgeString(Graphics2D g2, String s, double x, double dx, double y, double dy) {
+
         FontMetrics fm = g2.getFontMetrics();
-        double scale = fm.stringWidth(s)*2.5/Math.sqrt(dx*dx+dy*dy);
-        drawString(g2, s, (float) x -dx*scale - fm.stringWidth(s) / 2, (float) y -dy*scale - fm.getHeight() / 2 + fm.getAscent());
+        double scale = fm.stringWidth(s) * 2.5 / Math.sqrt(dx * dx + dy * dy);
+        drawString(g2, s, (float) x - dx * scale - fm.stringWidth(s) / 2,
+                (float) y - dy * scale - fm.getHeight() / 2 + fm.getAscent());
     }
 
     @Override
@@ -34,17 +35,15 @@ public class TrianglePanel extends JPanel {
 
         g2.draw(myPath);
 
-       drawString(g2, "A", (5 * ax + centerX) / 6, (5 * ay + centerY) / 6);
+        drawString(g2, "A", (5 * ax + centerX) / 6, (5 * ay + centerY) / 6);
         drawString(g2, "B", (5 * bx + centerX) / 6, (5 * by + centerY) / 6);
         drawString(g2, "C", (5 * cx + centerX) / 6, (5 * cy + centerY) / 6);
-        
-        
-        drawEdgeString(g2, "a", (bx+cx)/2,(ax-centerX), (by+cy)/2, (ay-centerY));
-        drawEdgeString(g2, "b", (ax+cx)/2, (bx-centerX), (ay+cy)/2, (by-centerY));
-        
-        drawEdgeString(g2, "c", (bx+ax)/2, (cx-centerX), (by+ay)/2, (cy-centerY));
-        
-        
+
+        drawEdgeString(g2, "a", (bx + cx) / 2, (ax - centerX), (by + cy) / 2, (ay - centerY));
+        drawEdgeString(g2, "b", (ax + cx) / 2, (bx - centerX), (ay + cy) / 2, (by - centerY));
+
+        drawEdgeString(g2, "c", (bx + ax) / 2, (cx - centerX), (by + ay) / 2, (cy - centerY));
+
     }
 
     @Override
@@ -52,9 +51,9 @@ public class TrianglePanel extends JPanel {
         if (isPreferredSizeSet()) {
             return super.getPreferredSize();
         }
-        double height = ay + 2*BORDER;
-        
-        return new Dimension((int)(Double.max(bx, cx) + 2*BORDER), (int)height );
+        double height = ay + 2 * BORDER;
+
+        return new Dimension((int) (Double.max(bx, cx) + 2 * BORDER), (int) height);
     }
 
     double max(double... values) {
@@ -75,11 +74,10 @@ public class TrianglePanel extends JPanel {
         this.bx = bx * scale + BORDER;
         this.by = cy * scale + BORDER;
         this.cx = cx * scale + BORDER;
-        this.cy =  BORDER;
-        this.centerX = (this.ax+this.bx+this.cx)/3;
-        this.centerY = (this.ay+this.by+this.cy)/3;
-        
-        
+        this.cy = BORDER;
+        this.centerX = (this.ax + this.bx + this.cx) / 3;
+        this.centerY = (this.ay + this.by + this.cy) / 3;
+
         myPath = new Path2D.Double();
         myPath.moveTo(this.ax, this.ay);
         myPath.lineTo(this.bx, this.by);

@@ -1,10 +1,12 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Point;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -58,18 +60,11 @@ public class TriangleBotGUI  {
         return field;
     }
 
-    public void addComponentsToPane(Container outerPane) {
+    public void addComponentsToPane(Container pane) {
 
-        outerPane.setLayout(new BorderLayout());
-        JPanel pane = new JPanel();
-        pane.setOpaque(true);
-        
+         
         pane.setLayout(new GridBagLayout());
-        outerPane.add(pane, BorderLayout.CENTER);
-        outerPane.add(quotes, BorderLayout.SOUTH);
-        quotes.setText(currentJoke.q);
-        quotes.setLineWrap(true);
-        quotes.setWrapStyleWord(true);
+        
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -112,7 +107,15 @@ public class TriangleBotGUI  {
             quotes.setText(currentJoke.q);
             
         });
-        
+        constraints.gridx = 0;
+        constraints.gridy++;
+        constraints.gridwidth = 4;
+        constraints.insets = new Insets(10, 10, 10, 10);
+        pane.add(quotes, constraints);
+        quotes.setText(currentJoke.q);
+        quotes.setLineWrap(true);
+        quotes.setWrapStyleWord(true);
+        quotes.setBorder(BorderFactory.createLineBorder(Color.RED));
        
 
     }
@@ -244,7 +247,7 @@ public class TriangleBotGUI  {
         frame.setContentPane(contentPane);
         
         contentPane.add(new TrianglePanel(ax, ay, bx, by, cx, cy), BorderLayout.CENTER);
-        JTextArea textArea = new JTextArea(explanation, 5, 40);
+        JTextArea textArea = new JTextArea(explanation, 8, 40);
         textArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(textArea);
         contentPane.add(scrollPane, BorderLayout.SOUTH);

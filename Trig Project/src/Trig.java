@@ -230,12 +230,12 @@ public class Trig {
         variant = new Trig(a2, b2, c2);
         variant.out.print(stringWriter.toString());
 
-        LawOfSinesSSA(a, a2, b);
-        LawOfSinesSSA(a, a2, c);
-        LawOfSinesSSA(b, b2, a);
-        LawOfSinesSSA(b, b2, c);
-        LawOfSinesSSA(c, c2, a);
-        LawOfSinesSSA(c, c2, b);
+        LawOfSinesSSA(a, a2, b, variant.out);
+        LawOfSinesSSA(a, a2, c, variant.out);
+        LawOfSinesSSA(b, b2, a, variant.out);
+        LawOfSinesSSA(b, b2, c, variant.out);
+        LawOfSinesSSA(c, c2, a, variant.out);
+        LawOfSinesSSA(c, c2, b, variant.out);
 
         if (this.equals(variant)) {
             this.variant = null;
@@ -249,16 +249,21 @@ public class Trig {
 
     }
 
-    public void LawOfSinesSSA(Side x, Side x2, Side y) {
+    public void LawOfSinesSSA(Side x, Side x2, Side y, PrintWriter out2) {
         // If the side of a is known but not the angle, and both the side and
         // angle are known for b, execute.
         if (known(x.side()) & !known(x.angle()) & known(y.angle(), y.side())) {
             // If the angle is not known
             out.printf("Using Law of Sines to determine %S° from %s, %S° and %s%n", x.getName(), x.getName(), y.getName(), y.getName());
-            out.printf("%S = sin⁻¹(%g * sin(%g°) / %g)", x.getName(), x.side(), y.angle(), y.side());
-            x.setAngle((asin((x.side() * sin(y.angle())) / y.side())));
+            out.printf("%S = sin⁻¹(%g * sin(%g°) / %g)%n", x.getName(), x.side(), y.angle(), y.side());
+            out2.printf("Using Law of Sines to determine %S° from %s, %S° and %s%n", x.getName(), x.getName(), y.getName(), y.getName());
+            out2.printf("%S = sin⁻¹(%g * sin(%g°) / %g)%n", x.getName(), x.side(), y.angle(), y.side());
+           x.setAngle((asin((x.side() * sin(y.angle())) / y.side())));
             x2.setAngle(90 + (90 - x.angle()));
-            out.printf("I came up with %g° and %g° for the two possible angles.%n%n", x.angle(), x2.angle());
+            out.printf("I came up with %g° and %g° for the two possible angles.%n", x.angle(), x2.angle());
+            out.printf("I will solve %g° in this window.%n%n", x.angle());
+            out2.printf("I came up with %g° and %g° for the two possible angles.%n", x.angle(), x2.angle());
+            out2.printf("I will solve %g° in this window.%n%n",  x2.angle());
         }
 
     }
