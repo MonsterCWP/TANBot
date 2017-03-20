@@ -1,12 +1,12 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,11 +16,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class TriangleBotGUI implements ActionListener {
+public class TriangleBotGUI  {
     final static boolean shouldFill = true;
     final static boolean shouldWeightX = true;
     JTextField a, b, c, A, B, C;
+    Joke currentJoke = Joke.notAJoke();
 
+    JTextArea quotes = new JTextArea(4, 30);
     static int offset = 0;
     public  int definedValues() {
         int result = definedSides();
@@ -39,36 +41,34 @@ public class TriangleBotGUI implements ActionListener {
     public static JTextField addField(Container pane, GridBagConstraints c, String label) {
         c.insets = new Insets(0, 10, 0, 0);
         c.weightx = 0;
+        c.fill = GridBagConstraints.NONE;
+        c.anchor = GridBagConstraints.LINE_END;
         pane.add(new JLabel(label), c);
         c.gridx++;
         c.insets = new Insets(0, 0, 0, 0);
         c.weightx = 1;
+        //c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.LINE_START;
         JTextField field = new JTextField();
           // = new JFormattedTextField(NumberOrBlankFormat.getInstance());
         field.setColumns(4);
         pane.add(field, c);
+        c.fill = GridBagConstraints.NONE;
+        c.anchor = GridBagConstraints.CENTER;
+        c.weightx = 0;
         c.gridx++;
         return field;
     }
 
     public void addComponentsToPane(Container pane) {
 
+         
         pane.setLayout(new GridBagLayout());
+        
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 0;
 
-        // constraints.fill = GridBagConstraints.HORIZONTAL;
-        // JTextArea description = new JTextArea("Now is the time for all good
-        // men to come to the aid of their country");
-        // description.setLineWrap(true);
-        // description.setWrapStyleWord(true);
-        // constraints.insets = new Insets(5,5,5,5);
-        // constraints.gridwidth = 4;
-        // pane.add(description, constraints);
-        // constraints.gridwidth = 1;
-        // constraints.fill = GridBagConstraints.NONE;
-        // constraints.gridy++;
 
         a = addField(pane, constraints, "a");
         A = addField(pane, constraints, "A");
@@ -83,12 +83,14 @@ public class TriangleBotGUI implements ActionListener {
         c = addField(pane, constraints, "c");
         C = addField(pane, constraints, "C");
 
+        // constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
         constraints.gridy++;
         constraints.gridwidth = 4;
+        constraints.weightx = 0;
         JButton calculate = new JButton("Calculate");
         pane.add(calculate, constraints);
-        calculate.addActionListener(this);
+        calculate.addActionListener(e -> { solve();});
         constraints.gridx = 0;
         constraints.gridy++;
         constraints.gridwidth = 4;
@@ -101,7 +103,20 @@ public class TriangleBotGUI implements ActionListener {
             B.setText("");
             c.setText("");
             C.setText("");
+            currentJoke = Joke.getJoke();
+            quotes.setText(currentJoke.q);
+            
         });
+        constraints.gridx = 0;
+        constraints.gridy++;
+        constraints.gridwidth = 4;
+        constraints.insets = new Insets(10, 10, 10, 10);
+        pane.add(quotes, constraints);
+        quotes.setText(currentJoke.q);
+        quotes.setLineWrap(true);
+        quotes.setWrapStyleWord(true);
+        quotes.setBorder(BorderFactory.createLineBorder(Color.RED));
+       
 
     }
   
@@ -119,7 +134,8 @@ public class TriangleBotGUI implements ActionListener {
         controlFrame.setVisible(true);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        Joke.readJokes();
         // Schedule a job for the event-dispatching thread:
         // creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -149,8 +165,8 @@ public class TriangleBotGUI implements ActionListener {
         side.setText(format(x.side()));
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+
+    public void solve() {
         if (definedValues() < 3) {
             if (definedSides() == 0) 
             JOptionPane.showMessageDialog(controlFrame,
@@ -178,7 +194,7 @@ public class TriangleBotGUI implements ActionListener {
 
         try {
         Trig triangle = Trig.solve(sideA, sideB, sideC);
-       
+        quotes.setText(currentJoke.a);
         showTriangle(triangle);
         if (triangle.variant != null)
             showTriangle(triangle.variant);
@@ -231,7 +247,7 @@ public class TriangleBotGUI implements ActionListener {
         frame.setContentPane(contentPane);
         
         contentPane.add(new TrianglePanel(ax, ay, bx, by, cx, cy), BorderLayout.CENTER);
-        JTextArea textArea = new JTextArea(explanation, 5, 40);
+        JTextArea textArea = new JTextArea(explanation, 8, 40);
         textArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(textArea);
         contentPane.add(scrollPane, BorderLayout.SOUTH);

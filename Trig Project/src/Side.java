@@ -48,7 +48,7 @@ public class Side {
 	public Side(Side a) {
 		side = a.side;
 		angle = a.angle;
-		name = (a.getName() + "2");
+		name = a.getName();
 	}
 	public String toString() {
         return String.format("%s = %g, %S = %g°", name, side, name, angle);
