@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -7,10 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class TriangleBotGUI implements ActionListener {
@@ -40,7 +43,8 @@ public class TriangleBotGUI implements ActionListener {
         c.gridx++;
         c.insets = new Insets(0, 0, 0, 0);
         c.weightx = 1;
-        JTextField field = new JFormattedTextField(NumberOrBlankFormat.getInstance());
+        JTextField field = new JTextField();
+          // = new JFormattedTextField(NumberOrBlankFormat.getInstance());
         field.setColumns(4);
         pane.add(field, c);
         c.gridx++;
@@ -212,17 +216,25 @@ public class TriangleBotGUI implements ActionListener {
             cx = 0.0;
         }
 
-        showTriangle(title, ax, ay, bx, by, cx, cy);
+        showTriangle(title, ax, ay, bx, by, cx, cy, triangle.stringWriter.toString());
     }
 
-    private void showTriangle(String title, double ax, double ay, double bx, double by, double cx, double cy) {
+    private void showTriangle(String title, double ax, double ay, double bx, double by, double cx, double cy, String explanation) {
         // Create and set up the window.
         JFrame frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         offset+=30;
         // Set up the content pane.
-        frame.getContentPane().add(new TrianglePanel(ax, ay, bx, by, cx, cy), null);
+        JPanel contentPane = new JPanel(new BorderLayout());
+        contentPane.setOpaque(true); //content panes must be opaque
+        frame.setContentPane(contentPane);
+        
+        contentPane.add(new TrianglePanel(ax, ay, bx, by, cx, cy), BorderLayout.CENTER);
+        JTextArea textArea = new JTextArea(explanation, 5, 40);
+        textArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        contentPane.add(scrollPane, BorderLayout.SOUTH);
         Point controlFrameLocation = controlFrame.getLocation();
         frame.setLocation((int)(controlFrameLocation.getX() + controlFrame.getWidth())+offset,
                 (int)(controlFrameLocation.getY())+offset);
