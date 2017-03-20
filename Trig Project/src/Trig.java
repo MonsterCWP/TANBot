@@ -38,7 +38,7 @@ public class Trig {
 	}
 	
 	//Returns how many of the values given are known.
-	public static double tallyKnown(double... values) {
+	public static int tallyKnown(double... values) {
 		int counter = 0;
 		for(double d : values) {
 			if (Double.isNaN(d)) { counter++; }
@@ -138,7 +138,7 @@ public class Trig {
 			
 			System.out.println("A = " + a.angle() + ", B = " + b.angle() + ", C = " + c.angle() + ".");
 			//At the end of the first loop, if nothing has been solved, then it is a SSA triangle.
-			if(counter == 1 & tallyKnown(a.angle(),a.side(),b.angle(),b.side(),c.angle(),c.side()) == 3.0) {
+			if(counter == 1 & tallyKnown(a.angle(),a.side(),b.angle(),b.side(),c.angle(),c.side()) == 3) {
 				//solveSSA(a, b, c);
 				exit = true;
 			}
