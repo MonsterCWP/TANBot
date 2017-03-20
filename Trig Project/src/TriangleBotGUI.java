@@ -18,6 +18,7 @@ public class TriangleBotGUI implements ActionListener {
     final static boolean shouldWeightX = true;
     JTextField a, b, c, A, B, C;
 
+    static int offset = 0;
     public  int definedValues() {
         int result = definedSides();
         if (!A.getText().isEmpty()) result++;
@@ -172,7 +173,11 @@ public class TriangleBotGUI implements ActionListener {
         Side sideC = new Side(getDouble(c), getDouble(C), "c");
 
         try {
-        Trig.solve(sideA, sideB, sideC);
+        Trig triangle = Trig.solve(sideA, sideB, sideC);
+       
+        showTriangle(triangle);
+        if (triangle.variant != null)
+            showTriangle(triangle.variant);
         } catch (IllegalArgumentException excetion) {
             JOptionPane.showMessageDialog(controlFrame,
                     "There are no triangles with those sides and angles",
@@ -181,6 +186,11 @@ public class TriangleBotGUI implements ActionListener {
             return;
         }
 
+    }
+    private void showTriangle(Trig triangle) {
+        Side sideA = triangle.a;
+        Side sideB = triangle.b;
+        Side sideC = triangle.c;
         set(A, a, sideA);
         set(B, b, sideB);
         set(C, c, sideC);
@@ -210,11 +220,12 @@ public class TriangleBotGUI implements ActionListener {
         JFrame frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        offset+=30;
         // Set up the content pane.
         frame.getContentPane().add(new TrianglePanel(ax, ay, bx, by, cx, cy), null);
         Point controlFrameLocation = controlFrame.getLocation();
-        frame.setLocation((int)(controlFrameLocation.getX() + controlFrame.getWidth()),
-                (int)(controlFrameLocation.getY()));
+        frame.setLocation((int)(controlFrameLocation.getX() + controlFrame.getWidth())+offset,
+                (int)(controlFrameLocation.getY())+offset);
         // Display the window.
         frame.pack();
         frame.setVisible(true);
