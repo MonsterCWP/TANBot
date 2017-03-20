@@ -62,10 +62,12 @@ public class Trig {
      * the angle
      */
     public void LawOfSines(Side x, Side y) {
-        if (!known(x.side()) & known(x.angle()) & known(y.angle(), y.side())) {
+        if (!known(x.side()) & known(x.angle(), y.angle(), y.side())) {
             // If the side is not known
-            out.printf("Using Law of Sines to determine %s%n", x.getName());
+            out.printf("Using Law of Sines to determine %s from %S°, %S° and %s%x", x.getName(), x.getName(), y.getName(), y.getName());
+            out.printf("%s = (%s * sin(%S°) / sin(%S°)%n", x.getName(), y.side(), x.angle(), y.angle());
             x.setLength(((y.side() * sin(x.angle()) / sin(y.angle()))));
+            out.printf("%s = %s%n%n", x.getName(), x.side());
         }
     }
 
@@ -84,15 +86,19 @@ public class Trig {
             if (!known(x.angle())) {
                 // If the angle is not known
                 // A = acos((b^2 + c^2 - a^2) / 2bc)
-                out.printf("Using Law of Cosines to determine %S%n", x.getName());
+                out.printf("Using Law of Cosines to determine %S° from %s, %s and %s%n", x.getName(), x.getName(), y.getName(), z.getName());
+                out.printf("%S° = cos⁻¹((%s² + %s² - %s²)/(2*%s*%s))", x.getName(), y.getName(), z.getName(), x.getName(), y.getName(), z.getName());
                 x.setAngle((acos((Math.pow(y.side(), 2) + Math.pow(z.side(), 2) - Math.pow(x.side(), 2))
                         / (2 * y.side() * z.side()))));
+                out.printf("%S° = %s", x.getName(), x.angle());
             } else if (!known(x.side())) {
                 // If the side is not known
                 // a = sqrt(b^2 + c^2 - 2*b*c*cosA)
-                out.printf("Using Law of Cosines to determine %s%n", x.getName());
+                out.printf("Using Law of Cosines to determine %s from %s, %s and %S°%n", x.getName(), y.getName(), z.getName(), x.getName());
+                out.printf("%s = sqrt(%s² + %s² - 2*%s*%s*cos(%S°)", x.getName(), y.getName(), z.getName(), y.getName(), z.getName(), x.getName());
                 x.setLength((Math.sqrt(
                         Math.pow(y.side(), 2) + Math.pow(z.side(), 2) - 2 * (z.side()) * (y.side()) * cos(x.angle()))));
+                out.printf("%s = %s%n%n", x.getName(), x.side());
             }
         }
     }
@@ -103,8 +109,10 @@ public class Trig {
      */
     public void LawOf180(Side x, Side y, Side z) {
         if (!known(x.angle()) & known(y.angle(), z.angle())) {
-            out.printf("Using Law of 180 to determine %S%n", x.getName());
+            out.printf("Using Law of 180 to determine %S° from %S° and %S°%n", x.getName(), y.getName(), z.getName());
+            out.printf("%S = 180° - %S° - %S°%n", x.getName(), y.getName(), z.getName());
             x.setAngle(180 - y.angle() - z.angle());
+            out.printf("%S = %S°%n%n", x.getName(), x.angle());
         }
     }
 
@@ -196,17 +204,20 @@ public class Trig {
             LawOf180(b, c, a);
             LawOf180(c, a, b);
 
-            out.println("A = " + a.angle() + ", B = " + b.angle() + ", C = " + c.angle() + ".");
             // At the end of the first loop, if nothing has been solved, then it
             // is a SSA triangle.
             if (counter == 1 & tallyKnown(a.angle(), a.side(), b.angle(), b.side(), c.angle(), c.side()) == 3) {
                 solveSSA();
-                return;
+               break;
             }
         }
+        
         if (counter == 20) {
             // Prints an error if the loop goes on too long.
             System.out.println("The loop went on too long and was ended! (Looped 20 times)");
+        } else {
+        	System.out.println("Solution found");
+        	System.out.println(stringWriter.toString());
         }
         
     }
@@ -243,11 +254,11 @@ public class Trig {
         // angle are known for b, execute.
         if (known(x.side()) & !known(x.angle()) & known(y.angle(), y.side())) {
             // If the angle is not known
-            out.printf("Using Law of Sines to determine %S%n", x.getName());
+            out.printf("Using Law of Sines to determine %S° from %s, %S° and %s%n", x.getName(), x.getName(), y.getName(), y.getName());
+            out.printf("%S = sin⁻¹(%s * sin(%S) / %s)", x.getName(), x.getName(), y.getName(), y.getName());
             x.setAngle((asin((x.side() * sin(y.angle())) / y.side())));
             x2.setAngle(90 + (90 - x.angle()));
-            out.println(
-                    "I came up with " + x.angle() + " and " + x2.angle() + " degrees for the two possible angles.");
+            out.printf("I came up with %S° and %S° degrees for the two possible angles.", x.angle(), x2.angle());
         }
 
     }
