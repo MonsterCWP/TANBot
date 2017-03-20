@@ -61,11 +61,11 @@ public class Trig {
      * Edits Side a so that it now contains information for both the side and
      * the angle
      */
-    public static void LawOfSines(Side a, Side b) {
-        if (!known(a.side()) & known(a.angle()) & known(b.angle(), b.side())) {
+    public void LawOfSines(Side x, Side y) {
+        if (!known(x.side()) & known(x.angle()) & known(y.angle(), y.side())) {
             // If the side is not known
-            System.out.printf("Using Law of Sines to determine %s%n", a.getName());
-            a.setLength(((b.side() * sin(a.angle()) / sin(b.angle()))));
+            out.printf("Using Law of Sines to determine %s%n", x.getName());
+            x.setLength(((y.side() * sin(x.angle()) / sin(y.angle()))));
         }
     }
 
@@ -84,13 +84,13 @@ public class Trig {
             if (!known(x.angle())) {
                 // If the angle is not known
                 // A = acos((b^2 + c^2 - a^2) / 2bc)
-                System.out.printf("Using Law of Cosines to determine %S%n", x.getName());
+                out.printf("Using Law of Cosines to determine %S%n", x.getName());
                 x.setAngle((acos((Math.pow(y.side(), 2) + Math.pow(z.side(), 2) - Math.pow(x.side(), 2))
                         / (2 * y.side() * z.side()))));
             } else if (!known(x.side())) {
                 // If the side is not known
                 // a = sqrt(b^2 + c^2 - 2*b*c*cosA)
-                System.out.printf("Using Law of Cosines to determine %s%n", x.getName());
+                out.printf("Using Law of Cosines to determine %s%n", x.getName());
                 x.setLength((Math.sqrt(
                         Math.pow(y.side(), 2) + Math.pow(z.side(), 2) - 2 * (z.side()) * (y.side()) * cos(x.angle()))));
             }
@@ -101,10 +101,10 @@ public class Trig {
      * If all of the angles except for one are known, subtracts the measure of
      * the other two from 180 to find the measure of the first angle.
      */
-    public static void LawOf180(Side a, Side b, Side c) {
-        if (!known(a.angle()) & known(b.angle(), c.angle())) {
-            System.out.printf("Using Law of 180 to determine %S%n", a.getName());
-            a.setAngle(180 - b.angle() - c.angle());
+    public void LawOf180(Side x, Side y, Side z) {
+        if (!known(x.angle()) & known(y.angle(), z.angle())) {
+            out.printf("Using Law of 180 to determine %S%n", x.getName());
+            x.setAngle(180 - y.angle() - z.angle());
         }
     }
 
@@ -238,16 +238,16 @@ public class Trig {
 
     }
 
-    public static void LawOfSinesSSA(Side a, Side a2, Side b) {
+    public void LawOfSinesSSA(Side x, Side x2, Side y) {
         // If the side of a is known but not the angle, and both the side and
         // angle are known for b, execute.
-        if (known(a.side()) & !known(a.angle()) & known(b.angle(), b.side())) {
+        if (known(x.side()) & !known(x.angle()) & known(y.angle(), y.side())) {
             // If the angle is not known
-            System.out.printf("Using Law of Sines to determine %S%n", a.getName());
-            a.setAngle((asin((a.side() * sin(b.angle())) / b.side())));
-            a2.setAngle(90 + (90 - a.angle()));
-            System.out.println(
-                    "I came up with " + a.angle() + " and " + a2.angle() + " degrees for the two possible angles.");
+            out.printf("Using Law of Sines to determine %S%n", x.getName());
+            x.setAngle((asin((x.side() * sin(y.angle())) / y.side())));
+            x2.setAngle(90 + (90 - x.angle()));
+            out.println(
+                    "I came up with " + x.angle() + " and " + x2.angle() + " degrees for the two possible angles.");
         }
 
     }
