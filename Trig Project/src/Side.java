@@ -4,9 +4,7 @@ public class Side {
 	private double side;
 	private double angle;
 	private String name;
-	private double side2;
-	private double angle2;
-	private String name2;
+	
 	
 	
 	//Setter & Getter Methods
@@ -16,16 +14,29 @@ public class Side {
 	public void setLength(double length) {this.side = length;}
 	public String getName() {return name;}
 	public void setName(String name) {this.name = name;}
-	public double angle2() {return angle2;}
-	public void setAngle2(double angle) {this.angle2 = angle;}
-	public double side2() {return side2;}
-	public void setSide2(double length) {this.side2 = length;}
-	public String getName2() {return name2;}
-	public void setName2(String name) {this.name2 = name;}
 	
-
 	
-	//Constructors
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof Side))
+            return false;
+        Side other = (Side) obj;
+        if (Double.doubleToLongBits(angle) != Double.doubleToLongBits(other.angle))
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (Double.doubleToLongBits(side) != Double.doubleToLongBits(other.side))
+            return false;
+        return true;
+    }
+    //Constructors
 	//Side(length, angle, name)
 	public Side(double a, double A, String name) {
 		side = a;
@@ -46,10 +57,5 @@ public class Side {
 		if(Trig.known(angle) ^ Trig.known(side)) { return true; } return false;
 	}
 	
-	//Merges two objects into one, with the second object's information being stored in 2 separate variables.
-	public void merge(Side a2) {
-		side2 = a2.side();
-		angle2 = a2.angle();
-		name2 = a2.getName();
-	}
+	
 }

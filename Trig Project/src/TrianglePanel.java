@@ -34,9 +34,7 @@ public class TrianglePanel extends JPanel {
 
         g2.draw(myPath);
 
-        FontMetrics fm = g2.getFontMetrics();
-
-        drawString(g2, "A", (5 * ax + centerX) / 6, (5 * ay + centerY) / 6);
+       drawString(g2, "A", (5 * ax + centerX) / 6, (5 * ay + centerY) / 6);
         drawString(g2, "B", (5 * bx + centerX) / 6, (5 * by + centerY) / 6);
         drawString(g2, "C", (5 * cx + centerX) / 6, (5 * cy + centerY) / 6);
         
