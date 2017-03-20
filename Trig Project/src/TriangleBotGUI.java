@@ -2,14 +2,15 @@ import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class TriangleBotGUI implements ActionListener {
@@ -17,6 +18,20 @@ public class TriangleBotGUI implements ActionListener {
     final static boolean shouldWeightX = true;
     JTextField a, b, c, A, B, C;
 
+    public  int definedValues() {
+        int result = definedSides();
+        if (!A.getText().isEmpty()) result++;
+        if (!B.getText().isEmpty()) result++;
+        if (!C.getText().isEmpty()) result++;
+        return result;
+    }
+    public  int definedSides() {
+        int result = 0;
+        if (!a.getText().isEmpty()) result++;
+        if (!b.getText().isEmpty()) result++;
+        if (!c.getText().isEmpty()) result++;
+        return result;
+    }
     public static JTextField addField(Container pane, GridBagConstraints c, String label) {
         c.insets = new Insets(0, 10, 0, 0);
         c.weightx = 0;
@@ -24,7 +39,7 @@ public class TriangleBotGUI implements ActionListener {
         c.gridx++;
         c.insets = new Insets(0, 0, 0, 0);
         c.weightx = 1;
-        JTextField field = new JFormattedTextField(DecimalFormat.getNumberInstance());
+        JTextField field = new JFormattedTextField(NumberOrBlankFormat.getInstance());
         field.setColumns(4);
         pane.add(field, c);
         c.gridx++;
@@ -85,18 +100,18 @@ public class TriangleBotGUI implements ActionListener {
 
     }
   
-
+    JFrame controlFrame = new JFrame("Triangle Bot GUI");
+    
     private void createAndShowGUI() {
         // Create and set up the window.
-        JFrame frame = new JFrame("Triangle Bot GUI");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+         controlFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Set up the content pane.
-        addComponentsToPane(frame.getContentPane());
+        addComponentsToPane(controlFrame.getContentPane());
 
         // Display the window.
-        frame.pack();
-        frame.setVisible(true);
+        controlFrame.pack();
+        controlFrame.setVisible(true);
     }
 
     public static void main(String[] args) {
@@ -131,16 +146,49 @@ public class TriangleBotGUI implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (definedValues() < 3) {
+            if (definedSides() == 0) 
+            JOptionPane.showMessageDialog(controlFrame,
+                    "You must define at least 3 values including at least one side",
+                    "Not enough information",
+                    JOptionPane.ERROR_MESSAGE);
+            else
+                JOptionPane.showMessageDialog(controlFrame,
+                        "You must define at least 3 values",
+                        "Not enough information",
+                        JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (definedSides() == 0) {
+            JOptionPane.showMessageDialog(controlFrame,
+                    "You must define at least 1 side",
+                    "Not enough information",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+            
         Side sideA = new Side(getDouble(a), getDouble(A), "a");
         Side sideB = new Side(getDouble(b), getDouble(B), "b");
         Side sideC = new Side(getDouble(c), getDouble(C), "c");
 
+        try {
         Trig.solve(sideA, sideB, sideC);
+        } catch (IllegalArgumentException excetion) {
+            JOptionPane.showMessageDialog(controlFrame,
+                    "There are no triangles with those sides and angles",
+                    "No Such Triangle",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         set(A, a, sideA);
         set(B, b, sideB);
         set(C, c, sideC);
 
+        String title = String.format("A = %s°, B = %s°, C = %s°     a = %s, b = %s, c = %s", format(sideA.angle()),
+                format(sideB.angle()), format(sideC.angle()),
+                format(sideA.side()), format(sideB.side()), format(sideC.side()));
+       
         double cx = Trig.cos(sideA.angle()) * sideB.side();
         double cy = Trig.sin(sideA.angle()) * sideB.side();
         double ax = 0;
@@ -154,17 +202,19 @@ public class TriangleBotGUI implements ActionListener {
             cx = 0.0;
         }
 
-        showTriangle(ax, ay, bx, by, cx, cy);
+        showTriangle(title, ax, ay, bx, by, cx, cy);
     }
 
-    private void showTriangle(double ax, double ay, double bx, double by, double cx, double cy) {
+    private void showTriangle(String title, double ax, double ay, double bx, double by, double cx, double cy) {
         // Create and set up the window.
-        JFrame frame = new JFrame("Resulting triangle");
+        JFrame frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         // Set up the content pane.
         frame.getContentPane().add(new TrianglePanel(ax, ay, bx, by, cx, cy), null);
-
+        Point controlFrameLocation = controlFrame.getLocation();
+        frame.setLocation((int)(controlFrameLocation.getX() + controlFrame.getWidth()),
+                (int)(controlFrameLocation.getY()));
         // Display the window.
         frame.pack();
         frame.setVisible(true);

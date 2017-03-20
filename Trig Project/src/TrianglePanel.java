@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 public class TrianglePanel extends JPanel {
     private static final int SIZE = 600;
-    private static final int BORDER = 10;
+    private static final int BORDER = 20;
     double ax, ay, bx, by, cx, cy;
     double centerX, centerY;
     Path2D myPath;
@@ -18,6 +18,13 @@ public class TrianglePanel extends JPanel {
         FontMetrics fm = g2.getFontMetrics();
 
         g2.drawString(s, (float) x - fm.stringWidth(s) / 2, (float) y - fm.getHeight() / 2 + fm.getAscent());
+    }
+
+    static void drawEdgeString(Graphics2D g2, String s, double x,double dx,  double y, double dy) {
+        
+        FontMetrics fm = g2.getFontMetrics();
+        double scale = fm.stringWidth(s)*2.5/Math.sqrt(dx*dx+dy*dy);
+        drawString(g2, s, (float) x -dx*scale - fm.stringWidth(s) / 2, (float) y -dy*scale - fm.getHeight() / 2 + fm.getAscent());
     }
 
     @Override
@@ -34,10 +41,10 @@ public class TrianglePanel extends JPanel {
         drawString(g2, "C", (5 * cx + centerX) / 6, (5 * cy + centerY) / 6);
         
         
-        drawString(g2, "a", (bx+cx)/2 - (ax-centerX)/8, (by+cy)/2 - (ay-centerY)/8);
-        drawString(g2, "b", (ax+cx)/2 - (bx-centerX)/8, (ay+cy)/2 - (by-centerY)/8);
+        drawEdgeString(g2, "a", (bx+cx)/2,(ax-centerX), (by+cy)/2, (ay-centerY));
+        drawEdgeString(g2, "b", (ax+cx)/2, (bx-centerX), (ay+cy)/2, (by-centerY));
         
-        drawString(g2, "c", (bx+ax)/2 - (cx-centerX)/8, (by+ay)/2 - (cy-centerY)/8);
+        drawEdgeString(g2, "c", (bx+ax)/2, (cx-centerX), (by+ay)/2, (cy-centerY));
         
         
     }
@@ -47,9 +54,9 @@ public class TrianglePanel extends JPanel {
         if (isPreferredSizeSet()) {
             return super.getPreferredSize();
         }
-        double height = ay - (cy-centerY)/8 + 2*BORDER;
+        double height = ay + 2*BORDER;
         
-        return new Dimension((int)(Double.max(bx, cx) + 2 * BORDER), (int)height );
+        return new Dimension((int)(Double.max(bx, cx) + 2*BORDER), (int)height );
     }
 
     double max(double... values) {
